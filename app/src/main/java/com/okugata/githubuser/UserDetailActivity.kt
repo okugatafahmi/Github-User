@@ -2,6 +2,7 @@ package com.okugata.githubuser
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import com.okugata.githubuser.databinding.ActivityUserDetailBinding
 import com.okugata.githubuser.model.User
 
@@ -20,8 +21,16 @@ class UserDetailActivity : AppCompatActivity() {
 
         user = intent.getParcelableExtra<User>(EXTRA_USER) as User
         supportActionBar?.title = user.name
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setInfo()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home->finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setInfo(){
