@@ -39,7 +39,7 @@ class ListUserAdapter (private val listUser: ArrayList<User>) :
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemUserBinding.bind(itemView)
         internal fun bind(user: User) {
-            binding.imgItemPhoto.setImageResource(user.avatar!!)
+            binding.imgItemPhoto.setImageResource(user.avatar ?: 0)
             binding.tvItemName.text = user.name
             binding.tvItemUsername.text = user.username
             val text = "${user.followers} Followers \u2022 ${user.following} Following"

@@ -52,7 +52,7 @@ class UserDetailActivity : AppCompatActivity() {
         binding.tvItemCompany.text = user.company
         binding.tvItemLocation.text = user.location
 
-        binding.imgItemPhoto.setImageResource(user.avatar!!)
+        binding.imgItemPhoto.setImageResource(user.avatar ?: 0)
     }
 
     private fun shareUser() {
