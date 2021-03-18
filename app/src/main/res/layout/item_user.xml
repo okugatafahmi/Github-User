@@ -14,29 +14,33 @@
         android:layout_centerVertical="true"
         tools:src="@android:color/darker_gray"/>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/img_item_photo"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="@string/name" />
+
+    <TextView
+        android:id="@+id/tv_item_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_item_name"
+        android:layout_alignBottom="@id/tv_item_name"
+        tools:text="@string/username"/>
+
+    <TextView
+        android:id="@+id/tv_item_followers_following"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_below="@id/tv_item_name"
         android:layout_toEndOf="@id/img_item_photo"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_item_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="@string/name" />
-
-        <TextView
-            android:id="@+id/tv_item_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            tools:text="@string/detail" />
-    </LinearLayout>
+        android:ellipsize="end"
+        android:maxLines="2"
+        tools:text="@string/followers_following" />
 
 </RelativeLayout>

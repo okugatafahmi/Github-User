@@ -1,5 +1,6 @@
 package com.okugata.githubuser
 
+import android.content.Intent
 import android.content.res.TypedArray
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -66,7 +67,9 @@ class MainActivity : AppCompatActivity() {
         val listUserAdapter = ListUserAdapter(users)
         listUserAdapter.setOnItemClickCallback(object : OnItemClickCallback {
             override fun onItemClicked(user: User) {
-                TODO("Implement Change Activity")
+                val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
+                userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, user)
+                startActivity(userDetailIntent)
             }
         })
         binding.rvUser.adapter = listUserAdapter
