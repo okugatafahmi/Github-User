@@ -7,6 +7,8 @@
     <string name="company">company</string>
     <string name="location">location</string>
     <string name="share">Share</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Insert Username</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
