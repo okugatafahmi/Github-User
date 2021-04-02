@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.okugata.githubuser.R
 import com.okugata.githubuser.databinding.ItemUserBinding
 import com.okugata.githubuser.model.User
@@ -39,11 +40,16 @@ class ListUserAdapter (private val listUser: ArrayList<User>) :
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemUserBinding.bind(itemView)
         internal fun bind(user: User) {
-            binding.imgItemPhoto.setImageResource(user.avatar ?: 0)
-            binding.tvItemName.text = user.name
+            if (user.avatarUrl.isNotEmpty()){
+                Glide.with(itemView.context)
+                    .load(user.avatarUrl)
+                    .into(binding.imgItemPhoto)
+            }
+            else {
+                binding.imgItemPhoto.setImageResource(user.avatar)
+            }
             binding.tvItemUsername.text = user.username
-            val text = "${user.followers} Followers \u2022 ${user.following} Following"
-            binding.tvItemFollowersFollowing.text = text
+            binding.tvItemName.text = user.name
         }
     }
 }

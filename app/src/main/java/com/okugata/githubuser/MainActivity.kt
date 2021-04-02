@@ -6,16 +6,20 @@ import android.content.Intent
 import android.content.res.TypedArray
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okugata.githubuser.databinding.ActivityMainBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
 import com.okugata.githubuser.recyclerview.OnItemClickCallback
+import com.okugata.githubuser.util.getGithubAPI
+import org.json.JSONObject
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var dataUsername: Array<String>
     private lateinit var dataName: Array<String>
@@ -44,6 +48,11 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
 
+        setSearchView(menu)
+        return true
+    }
+
+    private fun setSearchView(menu: Menu) {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu.findItem(R.id.search).actionView as SearchView
 
@@ -51,6 +60,10 @@ class MainActivity : AppCompatActivity() {
         searchView.queryHint = resources.getString(R.string.search_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                clearUsers()
+                searchView.clearFocus()
+                searchUsername(query)
+                showRecyclerList()
                 return true
             }
 
@@ -58,7 +71,36 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
-        return true
+    }
+
+    private fun clearUsers(){
+        users = arrayListOf()
+        binding.rvUser.adapter = ListUserAdapter(users)
+    }
+
+    private fun searchUsername(username: String) {
+        binding.progressBar.visibility = View.VISIBLE
+        getGithubAPI("https://api.github.com/search/users?q=$username") { error, response ->
+            binding.progressBar.visibility = View.INVISIBLE
+            if (error != null) {
+                return@getGithubAPI
+            }
+
+            try {
+                val responseObject = JSONObject(response)
+                val items = responseObject.getJSONArray("items")
+
+                for (i in 0 until items.length()) {
+                    val item = items.getJSONObject(i)
+                    val login = item.getString("login")
+                    val avatarUrl = item.getString("avatar_url")
+                    users.add(User(username = login, avatarUrl = avatarUrl))
+                }
+                showRecyclerList()
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun prepare() {
@@ -82,7 +124,8 @@ class MainActivity : AppCompatActivity() {
                 dataCompany[position],
                 dataFollowers[position].toInt(),
                 dataFollowing[position].toInt(),
-                dataAvatar.getResourceId(position, -1)
+                dataAvatar.getResourceId(position, -1),
+                isGetAPI = false
             )
             users.add(user)
         }

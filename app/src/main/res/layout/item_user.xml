@@ -20,48 +20,31 @@
         tools:src="@android:color/darker_gray" />
 
     <TextView
-        android:id="@+id/tv_item_name"
+        android:id="@+id/tv_item_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/img_item_photo"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/img_item_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/img_item_photo"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/name" />
-
-    <TextView
-        android:id="@+id/tv_item_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/tv_item_name"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/tv_item_name"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_item_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tv_item_name"
+        app:layout_constraintTop_toTopOf="@+id/img_item_photo"
         tools:text="@string/username" />
 
     <TextView
-        android:id="@+id/tv_item_followers_following"
+        android:id="@+id/tv_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_item_name"
+        android:layout_alignBottom="@id/tv_item_username"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
-        android:layout_toEndOf="@id/img_item_photo"
-        android:ellipsize="end"
-        android:maxLines="2"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_toEndOf="@id/tv_item_username"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_item_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/img_item_photo"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_name"
-        app:layout_constraintVertical_bias="0.0"
-        tools:text="@string/followers_following" />
+        app:layout_constraintStart_toEndOf="@+id/tv_item_username"
+        tools:text="@string/name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
