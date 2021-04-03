@@ -53,12 +53,13 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     private fun setInfo(){
+        if (user.name.isNotEmpty()) supportActionBar?.title = user.name
         binding.tvItemUsername.text = user.username
-        var temp = "${user.name} \u2022 ${user.repository} repositories"
-        binding.tvItemNameRepository.text = temp
+        binding.tvItemRepository.text = resources.getQuantityString(R.plurals.numberOfRepository,
+            user.repository, user.repository)
 
-        temp = "${user.followers} followers \u2022 ${user.following} following"
-        binding.tvItemFollowersFollowing.text = temp
+        binding.tvItemFollowersFollowing.text = resources.getString(R.string.followers_following,
+            user.followers, "\u2022", user.following)
 
         binding.tvItemCompany.text = user.company
         binding.tvItemLocation.text = user.location

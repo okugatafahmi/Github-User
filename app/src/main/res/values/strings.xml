@@ -2,8 +2,12 @@
     <string name="app_name">GitHub User</string>
     <string name="name">The Name</string>
     <string name="username">username</string>
-    <string name="username_repository">username repository</string>
-    <string name="followers_following">followers following</string>
+    <plurals name="numberOfRepository">
+        <item quantity="one">%d repository</item>
+        <item quantity="other">%d repositories</item>
+    </plurals>
+    <string name="repository">repository</string>
+    <string name="followers_following">%1$d followers %2$s %3$d following</string>
     <string name="company">company</string>
     <string name="location">location</string>
     <string name="share">Share</string>
