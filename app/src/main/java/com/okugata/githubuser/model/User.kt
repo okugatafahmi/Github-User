@@ -18,7 +18,7 @@ data class User(
     var avatarUrl: String="",
     var isGetAPI: Boolean=true
 ) : Parcelable {
-    init {
+    fun update(callback: () -> Unit) {
         if (isGetAPI) {
             getGithubAPI("https://api.github.com/users/$username"){ error, response ->
                 if (error != null) {
@@ -38,6 +38,7 @@ data class User(
                     following = responseObject.getInt("following")
                     avatarUrl = responseObject.getString("avatar_url")
                     isGetAPI = false
+                    callback()
                 } catch (e:Exception) {
                     e.printStackTrace()
                 }

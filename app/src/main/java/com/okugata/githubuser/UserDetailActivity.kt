@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import com.bumptech.glide.Glide
 import com.okugata.githubuser.databinding.ActivityUserDetailBinding
 import com.okugata.githubuser.model.User
 
@@ -22,10 +24,19 @@ class UserDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         user = intent.getParcelableExtra<User>(EXTRA_USER) as User
-        supportActionBar?.title = user.name
+        supportActionBar?.title = user.username
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setInfo()
+        if (user.isGetAPI) {
+            binding.progressBar.visibility = View.VISIBLE
+            user.update {
+                binding.progressBar.visibility = View.INVISIBLE
+                setInfo()
+            }
+        }
+        else {
+            setInfo()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -42,9 +53,9 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     private fun setInfo(){
-        binding.tvItemName.text = user.name
-        var temp = "${user.username} \u2022 ${user.repository} repositories"
-        binding.tvItemUsernameRepository.text = temp
+        binding.tvItemUsername.text = user.username
+        var temp = "${user.name} \u2022 ${user.repository} repositories"
+        binding.tvItemNameRepository.text = temp
 
         temp = "${user.followers} followers \u2022 ${user.following} following"
         binding.tvItemFollowersFollowing.text = temp
@@ -52,15 +63,21 @@ class UserDetailActivity : AppCompatActivity() {
         binding.tvItemCompany.text = user.company
         binding.tvItemLocation.text = user.location
 
-        binding.imgItemPhoto.setImageResource(user.avatar ?: 0)
+        if (user.avatarUrl.isNotEmpty()){
+            Glide.with(applicationContext)
+                .load(user.avatarUrl)
+                .into(binding.imgItemPhoto)
+        }
+        else {
+            binding.imgItemPhoto.setImageResource(user.avatar)
+        }
     }
 
     private fun shareUser() {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "I found a great GitHub user called " +
-                "${user.name} who has ${user.repository} repositories!\n" +
-                "Check it out https://github.com/${user.username}")
+            putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_user, user.username,
+                user.repository))
             type = "text/plain"
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
