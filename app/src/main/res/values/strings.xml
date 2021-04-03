@@ -24,6 +24,7 @@
     <string name="tab_followers">Followers</string>
     <string name="tab_following">Following</string>
     <string name="change_language_settings">Change Language</string>
+    <string name="reset_user_list">Reset User List</string>
 
     <string-array name="username">
         <item>JakeWharton</item>

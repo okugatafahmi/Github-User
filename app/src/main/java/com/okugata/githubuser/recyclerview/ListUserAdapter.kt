@@ -9,9 +9,16 @@ import com.okugata.githubuser.R
 import com.okugata.githubuser.databinding.ItemUserBinding
 import com.okugata.githubuser.model.User
 
-class ListUserAdapter (private val listUser: ArrayList<User>) :
+class ListUserAdapter :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
+    private val listUser = ArrayList<User>()
     private var onItemClickCallback: OnItemClickCallback? = null
+
+    fun setListUser(items: ArrayList<User>) {
+        listUser.clear()
+        listUser.addAll(items)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_user,

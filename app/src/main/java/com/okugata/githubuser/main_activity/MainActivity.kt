@@ -1,4 +1,4 @@
-package com.okugata.githubuser.mainactivity
+package com.okugata.githubuser.main_activity
 
 import android.app.SearchManager
 import android.content.Context
@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okugata.githubuser.R
 import com.okugata.githubuser.detailactivity.UserDetailActivity
@@ -18,13 +19,12 @@ import com.okugata.githubuser.databinding.ActivityMainBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
 import com.okugata.githubuser.recyclerview.OnItemClickCallback
-import com.okugata.githubuser.util.getGithubAPI
-import org.json.JSONObject
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: ListUserAdapter
+
     private lateinit var dataUsername: Array<String>
     private lateinit var dataName: Array<String>
     private lateinit var dataLocation: Array<String>
@@ -33,19 +33,46 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dataFollowers: Array<String>
     private lateinit var dataFollowing: Array<String>
     private lateinit var dataAvatar: TypedArray
+
+    private lateinit var mainViewModel: MainViewModel
     private var users = arrayListOf<User>()
+    private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        adapter = ListUserAdapter()
+        adapter.notifyDataSetChanged()
+        adapter.setOnItemClickCallback(object : OnItemClickCallback {
+            override fun onItemClicked(user: User) {
+                val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
+                userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, user)
+                startActivity(userDetailIntent)
+            }
+        })
+
         binding.rvUser.setHasFixedSize(true)
+        binding.rvUser.layoutManager = LinearLayoutManager(this)
+        binding.rvUser.adapter = adapter
+
+        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(MainViewModel::class.java)
 
         prepare()
         addItem()
+        adapter.setListUser(users)
 
-        showRecyclerList()
+        mainViewModel.getUsers().observe(this, { userItems ->
+            if (userItems != null) {
+                adapter.setListUser(userItems)
+                showLoading(false)
+            }
+            else if (isLoading) {
+                adapter.setListUser(ArrayList())
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,8 +89,21 @@ class MainActivity : AppCompatActivity() {
                 val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
                 startActivity(mIntent)
             }
+            R.id.action_reset_list -> {
+                mainViewModel.clearUsers()
+                adapter.setListUser(users)
+            }
         }
         return true
+    }
+
+    private fun showLoading(state: Boolean) {
+        isLoading = state
+        if (state) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
     private fun setSearchView(menu: Menu) {
@@ -74,10 +114,9 @@ class MainActivity : AppCompatActivity() {
         searchView.queryHint = resources.getString(R.string.search_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                clearUsers()
+                showLoading(true)
                 searchView.clearFocus()
-                searchUsername(query)
-                showRecyclerList()
+                mainViewModel.searchUsername(query)
                 return true
             }
 
@@ -85,37 +124,6 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
-    }
-
-    private fun clearUsers(){
-        users = arrayListOf()
-        binding.rvUser.adapter = ListUserAdapter(users)
-    }
-
-    private fun searchUsername(username: String) {
-        binding.progressBar.visibility = View.VISIBLE
-        getGithubAPI("https://api.github.com/search/users?q=$username") { error, response ->
-            binding.progressBar.visibility = View.INVISIBLE
-            if (error != null) {
-                error.printStackTrace()
-                return@getGithubAPI
-            }
-
-            try {
-                val responseObject = JSONObject(response)
-                val items = responseObject.getJSONArray("items")
-
-                for (i in 0 until items.length()) {
-                    val item = items.getJSONObject(i)
-                    val login = item.getString("login")
-                    val avatarUrl = item.getString("avatar_url")
-                    users.add(User(username = login, avatarUrl = avatarUrl))
-                }
-                showRecyclerList()
-            }catch (e: Exception){
-                e.printStackTrace()
-            }
-        }
     }
 
     private fun prepare() {
@@ -144,18 +152,5 @@ class MainActivity : AppCompatActivity() {
             )
             users.add(user)
         }
-    }
-
-    private fun showRecyclerList() {
-        binding.rvUser.layoutManager = LinearLayoutManager(this)
-        val listUserAdapter = ListUserAdapter(users)
-        listUserAdapter.setOnItemClickCallback(object : OnItemClickCallback {
-            override fun onItemClicked(user: User) {
-                val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
-                userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, user)
-                startActivity(userDetailIntent)
-            }
-        })
-        binding.rvUser.adapter = listUserAdapter
     }
 }

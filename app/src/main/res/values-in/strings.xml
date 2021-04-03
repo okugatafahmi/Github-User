@@ -23,4 +23,5 @@
     <string name="tab_followers">Pengikut</string>
     <string name="tab_following">Mengikuti</string>
     <string name="change_language_settings">Ubah Bahasa</string>
+    <string name="reset_user_list">Reset Daftar User</string>
 </resources>

@@ -76,7 +76,8 @@ class FollowFragment : Fragment() {
 
     private fun showRecyclerList() {
         rvUser.layoutManager = LinearLayoutManager(context)
-        val listUserAdapter = ListUserAdapter(users)
+        val listUserAdapter = ListUserAdapter()
+        listUserAdapter.setListUser(users)
         rvUser.adapter = listUserAdapter
     }
 }
