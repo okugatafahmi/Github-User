@@ -69,8 +69,12 @@ class UserDetailActivity : AppCompatActivity() {
         binding.tvItemRepository.text = resources.getQuantityString(R.plurals.numberOfRepository,
             user.repository, user.repository)
 
+        val followers = resources.getQuantityString(R.plurals.numberOfFollower, user.followers,
+            user.followers)
+        val following = resources.getQuantityString(R.plurals.numberOfFollowing, user.following,
+            user.following)
         binding.tvItemFollowersFollowing.text = resources.getString(R.string.followers_following,
-            user.followers, "\u2022", user.following)
+            followers, "\u2022", following)
 
         binding.tvItemCompany.text = user.company
         binding.tvItemLocation.text = user.location
