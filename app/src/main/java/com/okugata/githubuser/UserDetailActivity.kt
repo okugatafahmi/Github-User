@@ -6,13 +6,20 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.StringRes
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayoutMediator
 import com.okugata.githubuser.databinding.ActivityUserDetailBinding
 import com.okugata.githubuser.model.User
 
 class UserDetailActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_USER = "extra_user"
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_followers,
+            R.string.tab_following
+        )
     }
 
     private lateinit var user: User
@@ -24,18 +31,17 @@ class UserDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         user = intent.getParcelableExtra<User>(EXTRA_USER) as User
-        supportActionBar?.title = user.username
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (user.isGetAPI) {
             binding.progressBar.visibility = View.VISIBLE
             user.update {
                 binding.progressBar.visibility = View.INVISIBLE
-                setInfo()
+                doneLoading()
             }
         }
         else {
-            setInfo()
+            doneLoading()
         }
     }
 
@@ -52,8 +58,13 @@ class UserDetailActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun doneLoading() {
+        setInfo()
+        setTabLayout()
+    }
+
     private fun setInfo(){
-        if (user.name.isNotEmpty()) supportActionBar?.title = user.name
+        supportActionBar?.title = if (user.name.isNotEmpty())  user.name else user.username
         binding.tvItemUsername.text = user.username
         binding.tvItemRepository.text = resources.getQuantityString(R.plurals.numberOfRepository,
             user.repository, user.repository)
@@ -72,6 +83,16 @@ class UserDetailActivity : AppCompatActivity() {
         else {
             binding.imgItemPhoto.setImageResource(user.avatar)
         }
+    }
+
+    private fun setTabLayout() {
+        val sectionsPagerAdapter = SectionsPagerAdapter(this)
+        val viewPager = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
+        val tabs = binding.tabs
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
     }
 
     private fun shareUser() {

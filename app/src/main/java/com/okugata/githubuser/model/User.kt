@@ -8,7 +8,7 @@ import org.json.JSONObject
 @Parcelize
 data class User(
     var username: String="",
-    var name: String="Private Name",
+    var name: String="",
     var location: String="No Location",
     var repository: Int=0,
     var company: String="No Company",

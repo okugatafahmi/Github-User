@@ -14,6 +14,8 @@
     <string name="search">Search</string>
     <string name="search_hint">Insert Username</string>
     <string name="share_user">I found a great GitHub user with username %1$s who has %2$d repositories!\nCheck it out https://github.com/%1$s</string>
+    <string name="tab_followers">Followers</string>
+    <string name="tab_following">Following</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
