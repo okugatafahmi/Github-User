@@ -1,4 +1,4 @@
-package com.okugata.githubuser
+package com.okugata.githubuser.detailactivity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
+import com.okugata.githubuser.R
 import com.okugata.githubuser.databinding.ActivityUserDetailBinding
 import com.okugata.githubuser.model.User
 
@@ -52,7 +53,7 @@ class UserDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.share_user->shareUser()
+            R.id.share_user ->shareUser()
             android.R.id.home->finish()
         }
         return super.onOptionsItemSelected(item)

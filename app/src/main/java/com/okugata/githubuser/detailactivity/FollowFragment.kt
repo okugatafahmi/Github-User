@@ -1,4 +1,4 @@
-package com.okugata.githubuser
+package com.okugata.githubuser.detailactivity
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.okugata.githubuser.R
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
 import com.okugata.githubuser.util.getGithubAPI

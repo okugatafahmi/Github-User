@@ -1,4 +1,4 @@
-package com.okugata.githubuser
+package com.okugata.githubuser.mainactivity
 
 import android.app.SearchManager
 import android.content.Context
@@ -12,6 +12,8 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.okugata.githubuser.R
+import com.okugata.githubuser.detailactivity.UserDetailActivity
 import com.okugata.githubuser.databinding.ActivityMainBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
