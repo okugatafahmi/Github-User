@@ -11,7 +11,7 @@ import com.okugata.githubuser.model.User
 
 class ListUserAdapter (private val listUser: ArrayList<User>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
-    private lateinit var onItemClickCallback: OnItemClickCallback
+    private var onItemClickCallback: OnItemClickCallback? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_user,
@@ -25,7 +25,7 @@ class ListUserAdapter (private val listUser: ArrayList<User>) :
         holder.bind(user)
 
         holder.itemView.setOnClickListener {
-            onItemClickCallback.onItemClicked(user)
+            onItemClickCallback?.onItemClicked(user)
         }
     }
 

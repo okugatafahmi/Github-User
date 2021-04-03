@@ -5,11 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
-import com.okugata.githubuser.recyclerview.OnItemClickCallback
 import com.okugata.githubuser.util.getGithubAPI
 import org.json.JSONArray
 import java.lang.Exception
@@ -31,6 +31,7 @@ class FollowFragment : Fragment() {
     private val apiList = arrayOf("followers", "following")
     private var users = arrayListOf<User>()
     private lateinit var rvUser: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -43,10 +44,14 @@ class FollowFragment : Fragment() {
         val index = arguments?.getInt(ARG_SECTION_NUMBER, 0) ?: 0
         val username = arguments?.getString(ARG_USERNAME, "") ?: ""
         rvUser = view.findViewById(R.id.rv_user)
+        progressBar = view.findViewById(R.id.progressBar)
+
         rvUser.setHasFixedSize(true)
         showRecyclerList()
 
+        progressBar.visibility = View.VISIBLE
         getGithubAPI("https://api.github.com/users/$username/${apiList[index]}"){ error, response ->
+            progressBar.visibility = View.INVISIBLE
             if (error != null) {
                 error.printStackTrace()
                 return@getGithubAPI
@@ -71,11 +76,6 @@ class FollowFragment : Fragment() {
     private fun showRecyclerList() {
         rvUser.layoutManager = LinearLayoutManager(context)
         val listUserAdapter = ListUserAdapter(users)
-        listUserAdapter.setOnItemClickCallback(object : OnItemClickCallback {
-            override fun onItemClicked(user: User) {
-
-            }
-        })
         rvUser.adapter = listUserAdapter
     }
 }
