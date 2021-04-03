@@ -86,7 +86,7 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     private fun setTabLayout() {
-        val sectionsPagerAdapter = SectionsPagerAdapter(this)
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, user.username)
         val viewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
         val tabs = binding.tabs

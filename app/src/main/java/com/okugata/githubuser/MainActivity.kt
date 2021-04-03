@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         getGithubAPI("https://api.github.com/search/users?q=$username") { error, response ->
             binding.progressBar.visibility = View.INVISIBLE
             if (error != null) {
+                error.printStackTrace()
                 return@getGithubAPI
             }
 
