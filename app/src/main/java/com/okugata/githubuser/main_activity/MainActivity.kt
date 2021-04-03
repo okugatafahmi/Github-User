@@ -14,7 +14,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okugata.githubuser.R
-import com.okugata.githubuser.detailactivity.UserDetailActivity
+import com.okugata.githubuser.detail_activity.UserDetailActivity
 import com.okugata.githubuser.databinding.ActivityMainBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         addItem()
         adapter.setListUser(users)
 
-        mainViewModel.getUsers().observe(this, { userItems ->
+        mainViewModel.getUsers().observe(this) { userItems ->
             if (userItems != null) {
                 adapter.setListUser(userItems)
                 showLoading(false)
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             else if (isLoading) {
                 adapter.setListUser(ArrayList())
             }
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

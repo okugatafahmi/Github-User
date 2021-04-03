@@ -1,4 +1,4 @@
-package com.okugata.githubuser.detailactivity
+package com.okugata.githubuser.detail_activity
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.okugata.githubuser.R
+import com.okugata.githubuser.main_activity.MainViewModel
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
 import com.okugata.githubuser.util.getGithubAPI
@@ -30,9 +32,11 @@ class FollowFragment : Fragment() {
     }
 
     private val apiList = arrayOf("followers", "following")
-    private var users = arrayListOf<User>()
     private lateinit var rvUser: RecyclerView
+    private lateinit var adapter: ListUserAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var detailViewModel: UserDetailViewModel
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -47,37 +51,24 @@ class FollowFragment : Fragment() {
         rvUser = view.findViewById(R.id.rv_user)
         progressBar = view.findViewById(R.id.progressBar)
 
+        adapter = ListUserAdapter()
+        adapter.notifyDataSetChanged()
+
         rvUser.setHasFixedSize(true)
-        showRecyclerList()
+        rvUser.layoutManager = LinearLayoutManager(activity)
+        rvUser.adapter = adapter
 
         progressBar.visibility = View.VISIBLE
-        getGithubAPI("https://api.github.com/users/$username/${apiList[index]}"){ error, response ->
-            progressBar.visibility = View.INVISIBLE
-            if (error != null) {
-                error.printStackTrace()
-                return@getGithubAPI
-            }
 
-            try {
-                val items = JSONArray(response)
-
-                for (i in 0 until items.length()) {
-                    val item = items.getJSONObject(i)
-                    val login = item.getString("login")
-                    val avatarUrl = item.getString("avatar_url")
-                    users.add(User(username = login, avatarUrl = avatarUrl))
-                }
-                showRecyclerList()
-            }catch (e: Exception){
-                e.printStackTrace()
+        detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(UserDetailViewModel::class.java)
+        detailViewModel.getUsers().observe(viewLifecycleOwner){ userItems ->
+            if (userItems != null) {
+                adapter.setListUser(userItems)
+                progressBar.visibility = View.GONE
             }
         }
-    }
 
-    private fun showRecyclerList() {
-        rvUser.layoutManager = LinearLayoutManager(context)
-        val listUserAdapter = ListUserAdapter()
-        listUserAdapter.setListUser(users)
-        rvUser.adapter = listUserAdapter
+        detailViewModel.getAPI("https://api.github.com/users/$username/${apiList[index]}")
     }
 }
