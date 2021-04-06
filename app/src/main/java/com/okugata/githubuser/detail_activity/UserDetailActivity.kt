@@ -34,6 +34,7 @@ class UserDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.collapsingToolbar.setCollapsedTitleTextColor(
             ContextCompat.getColor(this, R.color.white)
@@ -42,8 +43,10 @@ class UserDetailActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.grey)
         )
 
+        binding.scrollView.isFillViewport = true
+
         user = intent.getParcelableExtra<User>(EXTRA_USER) as User
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (user.isGetAPI) {
             binding.progressBar.visibility = View.VISIBLE
             user.update {
