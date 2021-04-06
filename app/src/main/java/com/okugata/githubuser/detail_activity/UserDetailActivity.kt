@@ -1,17 +1,20 @@
 package com.okugata.githubuser.detail_activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.okugata.githubuser.R
 import com.okugata.githubuser.databinding.ActivityUserDetailBinding
 import com.okugata.githubuser.model.User
+
 
 class UserDetailActivity : AppCompatActivity() {
     companion object {
@@ -31,9 +34,17 @@ class UserDetailActivity : AppCompatActivity() {
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+
+        binding.collapsingToolbar.setCollapsedTitleTextColor(
+            ContextCompat.getColor(this, R.color.white)
+        )
+        binding.collapsingToolbar.setExpandedTitleColor(
+            ContextCompat.getColor(this, R.color.grey)
+        )
+
         user = intent.getParcelableExtra<User>(EXTRA_USER) as User
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         if (user.isGetAPI) {
             binding.progressBar.visibility = View.VISIBLE
             user.update {
@@ -53,8 +64,8 @@ class UserDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.share_user ->shareUser()
-            android.R.id.home->finish()
+            R.id.share_user -> shareUser()
+            android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -65,17 +76,25 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     private fun setInfo(){
-        supportActionBar?.title = if (user.name.isNotEmpty())  user.name else user.username
+        binding.collapsingToolbar.title = if (user.name.isNotEmpty())  user.name else user.username
         binding.tvItemUsername.text = user.username
-        binding.tvItemRepository.text = resources.getQuantityString(R.plurals.numberOfRepository,
-            user.repository, user.repository)
+        binding.tvItemRepository.text = resources.getQuantityString(
+            R.plurals.numberOfRepository,
+            user.repository, user.repository
+        )
 
-        val followers = resources.getQuantityString(R.plurals.numberOfFollower, user.followers,
-            user.followers)
-        val following = resources.getQuantityString(R.plurals.numberOfFollowing, user.following,
-            user.following)
-        binding.tvItemFollowersFollowing.text = resources.getString(R.string.followers_following,
-            followers, "\u2022", following)
+        val followers = resources.getQuantityString(
+            R.plurals.numberOfFollower, user.followers,
+            user.followers
+        )
+        val following = resources.getQuantityString(
+            R.plurals.numberOfFollowing, user.following,
+            user.following
+        )
+        binding.tvItemFollowersFollowing.text = resources.getString(
+            R.string.followers_following,
+            followers, "\u2022", following
+        )
 
         binding.tvItemCompany.text = user.company
         binding.tvItemLocation.text = user.location
@@ -103,8 +122,12 @@ class UserDetailActivity : AppCompatActivity() {
     private fun shareUser() {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, resources.getQuantityString(R.plurals.numberOfRepositoryShareUser,
-                user.repository, user.username, user.repository))
+            putExtra(
+                Intent.EXTRA_TEXT, resources.getQuantityString(
+                    R.plurals.numberOfRepositoryShareUser,
+                    user.repository, user.username, user.repository
+                )
+            )
             type = "text/plain"
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
