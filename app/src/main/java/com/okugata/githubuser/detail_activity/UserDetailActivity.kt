@@ -103,8 +103,8 @@ class UserDetailActivity : AppCompatActivity() {
     private fun shareUser() {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_user, user.username,
-                user.repository))
+            putExtra(Intent.EXTRA_TEXT, resources.getQuantityString(R.plurals.numberOfRepositoryShareUser,
+                user.repository, user.username, user.repository))
             type = "text/plain"
         }
         val shareIntent = Intent.createChooser(sendIntent, null)

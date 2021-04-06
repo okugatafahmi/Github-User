@@ -19,7 +19,9 @@
     <string name="share">Bagikan</string>
     <string name="search">Cari</string>
     <string name="search_hint">Masukkan username</string>
-    <string name="share_user">Saya menemukan pengguna GitHub yang bagus dengan username %1$s yang memiliki %2$d repositori!\nCek di https://github.com/%1$s</string>
+    <plurals name="numberOfRepositoryShareUser">
+        <item quantity="other">Saya menemukan pengguna GitHub yang bagus dengan username %1$s yang memiliki %2$d repositori!\nCek di https://github.com/%1$s</item>
+    </plurals>
     <string name="tab_followers">Pengikut</string>
     <string name="tab_following">Mengikuti</string>
     <string name="change_language_settings">Ubah Bahasa</string>

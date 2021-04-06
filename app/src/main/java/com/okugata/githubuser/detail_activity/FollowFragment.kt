@@ -10,12 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.okugata.githubuser.R
-import com.okugata.githubuser.main_activity.MainViewModel
-import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
-import com.okugata.githubuser.util.getGithubAPI
-import org.json.JSONArray
-import java.lang.Exception
 
 class FollowFragment : Fragment() {
     companion object {
