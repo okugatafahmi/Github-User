@@ -26,4 +26,5 @@
     <string name="tab_following">Mengikuti</string>
     <string name="change_language_settings">Ubah Bahasa</string>
     <string name="reset_user_list">Reset Daftar User</string>
+    <string name="about_developer">Tentang Pengembang</string>
 </resources>

@@ -93,6 +93,12 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.clearUsers()
                 adapter.setListUser(users)
             }
+            R.id.about_developer -> {
+                val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
+                userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, User(
+                    username = resources.getString(R.string.developer_username)))
+                startActivity(userDetailIntent)
+            }
         }
         return true
     }

@@ -18,4 +18,9 @@
         android:id="@+id/action_reset_list"
         android:title="@string/reset_user_list"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/about_developer"
+        android:title="@string/about_developer"
+        app:showAsAction="never"/>
 </menu>

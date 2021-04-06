@@ -28,6 +28,8 @@
     <string name="tab_following">Following</string>
     <string name="change_language_settings">Change Language</string>
     <string name="reset_user_list">Reset User List</string>
+    <string name="developer_username" translatable="false">okugatafahmi</string>
+    <string name="about_developer">About Developer</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
