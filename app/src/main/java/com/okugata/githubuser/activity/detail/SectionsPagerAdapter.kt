@@ -1,4 +1,4 @@
-package com.okugata.githubuser.detail_activity
+package com.okugata.githubuser.activity.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment

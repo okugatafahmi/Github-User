@@ -13,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubUser">
         <activity
-            android:name=".detail_activity.UserDetailActivity"
+            android:name="com.okugata.githubuser.activity.detail.UserDetailActivity"
             android:theme="@style/NoActionBar"/>
-        <activity android:name=".main_activity.MainActivity">
+        <activity android:name="com.okugata.githubuser.activity.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

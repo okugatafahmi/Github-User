@@ -1,4 +1,4 @@
-package com.okugata.githubuser.main_activity
+package com.okugata.githubuser.activity.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
