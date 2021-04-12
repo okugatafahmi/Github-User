@@ -2,6 +2,7 @@ package com.okugata.githubuser.activity.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -50,13 +51,14 @@ class UserDetailActivity : AppCompatActivity() {
         if (user.isGetAPI) {
             binding.progressBar.visibility = View.VISIBLE
             user.update {
-                binding.progressBar.visibility = View.INVISIBLE
-                doneLoading()
+                binding.progressBar.visibility = View.GONE
+                setInfo()
             }
         }
         else {
-            doneLoading()
+            setInfo()
         }
+        setTabLayout()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,11 +72,6 @@ class UserDetailActivity : AppCompatActivity() {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun doneLoading() {
-        setInfo()
-        setTabLayout()
     }
 
     private fun setInfo(){

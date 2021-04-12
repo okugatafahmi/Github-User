@@ -16,6 +16,8 @@ class FollowFragment : Fragment() {
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"
         private const val ARG_USERNAME = "username"
+        private val API_LIST = arrayOf("followers", "following")
+
         @JvmStatic
         fun newInstance(index: Int, username: String) =
             FollowFragment().apply {
@@ -26,9 +28,7 @@ class FollowFragment : Fragment() {
             }
     }
 
-    private val apiList = arrayOf("followers", "following")
     private lateinit var rvUser: RecyclerView
-    private lateinit var adapter: ListUserAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var detailViewModel: UserDetailViewModel
 
@@ -46,8 +46,7 @@ class FollowFragment : Fragment() {
         rvUser = view.findViewById(R.id.rv_user)
         progressBar = view.findViewById(R.id.progressBar)
 
-        adapter = ListUserAdapter()
-        adapter.notifyDataSetChanged()
+        val adapter = ListUserAdapter()
 
         rvUser.setHasFixedSize(true)
         rvUser.layoutManager = LinearLayoutManager(activity)
@@ -64,6 +63,6 @@ class FollowFragment : Fragment() {
             }
         }
 
-        detailViewModel.getAPI("https://api.github.com/users/$username/${apiList[index]}")
+        detailViewModel.getAPI("https://api.github.com/users/$username/${API_LIST[index]}")
     }
 }

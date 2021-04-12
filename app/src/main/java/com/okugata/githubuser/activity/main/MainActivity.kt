@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okugata.githubuser.R
 import com.okugata.githubuser.activity.detail.UserDetailActivity
+import com.okugata.githubuser.activity.favorite.UserFavoriteActivity
 import com.okugata.githubuser.databinding.ActivityMainBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
@@ -43,15 +44,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = ListUserAdapter()
-        adapter.notifyDataSetChanged()
-        adapter.setOnItemClickCallback(object : OnItemClickCallback {
-            override fun onItemClicked(user: User) {
-                val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
-                userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, user)
-                startActivity(userDetailIntent)
-            }
-        })
+        adapter = ListUserAdapter().apply {
+            setOnItemClickCallback(object : OnItemClickCallback {
+                override fun onItemClicked(user: User) {
+                    val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
+                    userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, user)
+                    startActivity(userDetailIntent)
+                }
+            })
+        }
 
         binding.rvUser.setHasFixedSize(true)
         binding.rvUser.layoutManager = LinearLayoutManager(this)
@@ -64,14 +65,9 @@ class MainActivity : AppCompatActivity() {
         addItem()
         adapter.setListUser(users)
 
-        mainViewModel.getUsers().observe(this) { userItems ->
-            if (userItems != null) {
-                adapter.setListUser(userItems)
-                showLoading(false)
-            }
-            else if (isLoading) {
-                adapter.setListUser(ArrayList())
-            }
+        mainViewModel.listUsers.observe(this) { userItems ->
+            adapter.setListUser(userItems)
+            showLoading(false)
         }
     }
 
@@ -84,19 +80,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
+            R.id.favorite -> {
+                val userFavoriteIntent = Intent(this@MainActivity, UserFavoriteActivity::class.java)
+                startActivity(userFavoriteIntent)
+            }
             R.id.action_change_settings -> {
                 val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
                 startActivity(mIntent)
             }
             R.id.action_reset_list -> {
-                mainViewModel.clearUsers()
-                adapter.setListUser(users)
+                mainViewModel.setUsers(users)
             }
             R.id.about_developer -> {
                 val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
-                userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, User(
-                    username = resources.getString(R.string.developer_username)))
+                    .apply {
+                        putExtra(
+                            UserDetailActivity.EXTRA_USER, User(
+                                username = resources.getString(R.string.developer_username)
+                            )
+                        )
+                    }
                 startActivity(userDetailIntent)
             }
         }
@@ -106,6 +110,7 @@ class MainActivity : AppCompatActivity() {
     private fun showLoading(state: Boolean) {
         isLoading = state
         if (state) {
+            adapter.setListUser(ArrayList())
             binding.progressBar.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.GONE

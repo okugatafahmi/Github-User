@@ -9,11 +9,11 @@ import org.json.JSONObject
 import java.lang.Exception
 
 class MainViewModel: ViewModel() {
-    private val listUsers = MutableLiveData<ArrayList<User>>()
+    private val _listUsers = MutableLiveData<ArrayList<User>>()
+    val listUsers: LiveData<ArrayList<User>> = _listUsers
 
     fun searchUsername(username: String) {
         val users = ArrayList<User>()
-        listUsers.postValue(null)
         getGithubAPI("https://api.github.com/search/users?q=$username") { error, response ->
             if (error != null) {
                 error.printStackTrace()
@@ -30,18 +30,14 @@ class MainViewModel: ViewModel() {
                     val avatarUrl = item.getString("avatar_url")
                     users.add(User(username = login, avatarUrl = avatarUrl))
                 }
-                listUsers.postValue(users)
+                _listUsers.postValue(users)
             }catch (e: Exception){
                 e.printStackTrace()
             }
         }
     }
 
-    fun getUsers(): LiveData<ArrayList<User>> {
-        return listUsers
-    }
-
-    fun clearUsers() {
-        listUsers.postValue(null)
+    fun setUsers(users: ArrayList<User>) {
+        _listUsers.postValue(users)
     }
 }
