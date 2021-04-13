@@ -4,12 +4,12 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.TypedArray
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +20,7 @@ import com.okugata.githubuser.databinding.ActivityMainBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
 import com.okugata.githubuser.recyclerview.OnItemClickCallback
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -117,22 +118,45 @@ class MainActivity : AppCompatActivity() {
 
     private fun setSearchView(menu: Menu) {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
 
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.queryHint = resources.getString(R.string.search_hint)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                showLoading(true)
-                searchView.clearFocus()
-                mainViewModel.searchUsername(query)
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                setItemsVisibility(menu, searchItem, false)
                 return true
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                return false
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                setItemsVisibility(menu, searchItem, true)
+                invalidateOptionsMenu()
+                return true
             }
         })
+
+        searchView.apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            queryHint = resources.getString(R.string.search_hint)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    showLoading(true)
+                    searchView.clearFocus()
+                    mainViewModel.searchUsername(query)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    return false
+                }
+            })
+        }
+    }
+
+    private fun setItemsVisibility(menu: Menu, exception: MenuItem, isVisible: Boolean) {
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            if (item !== exception) item.isVisible = isVisible
+        }
     }
 
     private fun prepare() {

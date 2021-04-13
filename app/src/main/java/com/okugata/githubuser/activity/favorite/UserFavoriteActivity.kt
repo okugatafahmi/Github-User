@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okugata.githubuser.GithubUserApplication
+import com.okugata.githubuser.R
 import com.okugata.githubuser.activity.detail.UserDetailActivity
 import com.okugata.githubuser.database.UserFavoriteViewModel
 import com.okugata.githubuser.database.UserFavoriteViewModelFactory
@@ -28,7 +29,7 @@ class UserFavoriteActivity : AppCompatActivity() {
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            title = "Favorites"
+            title = getString(R.string.favorite)
         }
 
         val adapter = ListUserAdapter().apply {
