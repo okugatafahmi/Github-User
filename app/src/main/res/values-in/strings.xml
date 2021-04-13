@@ -28,4 +28,5 @@
     <string name="reset_user_list">Reset Daftar User</string>
     <string name="about_developer">Tentang Pengembang</string>
     <string name="favorite">Favorit</string>
+    <string name="add_favorite">Tambahkan Favorit</string>
 </resources>

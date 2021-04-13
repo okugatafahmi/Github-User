@@ -12,4 +12,9 @@ class UserFavoriteRepository(private val userFavoriteDao: UserFavoriteDao) {
     suspend fun insert(userFavorite: UserFavorite) {
         userFavoriteDao.insert(userFavorite)
     }
+
+    @WorkerThread
+    suspend fun delete(userFavorite: UserFavorite) {
+        userFavoriteDao.delete(userFavorite)
+    }
 }

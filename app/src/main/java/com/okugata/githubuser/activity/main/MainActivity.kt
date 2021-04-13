@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
     private var users = arrayListOf<User>()
-    private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +107,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoading(state: Boolean) {
-        isLoading = state
         if (state) {
             adapter.setListUser(ArrayList())
             binding.progressBar.visibility = View.VISIBLE

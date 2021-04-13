@@ -30,7 +30,7 @@ class FollowFragment : Fragment() {
 
     private lateinit var rvUser: RecyclerView
     private lateinit var progressBar: ProgressBar
-    private lateinit var detailViewModel: UserDetailViewModel
+    private lateinit var followViewModel: FollowlViewModel
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -54,15 +54,15 @@ class FollowFragment : Fragment() {
 
         progressBar.visibility = View.VISIBLE
 
-        detailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
-            .get(UserDetailViewModel::class.java)
-        detailViewModel.getUsers().observe(viewLifecycleOwner){ userItems ->
+        followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+            .get(FollowlViewModel::class.java)
+        followViewModel.listUsers.observe(viewLifecycleOwner){ userItems ->
             if (userItems != null) {
                 adapter.setListUser(userItems)
                 progressBar.visibility = View.GONE
             }
         }
 
-        detailViewModel.getAPI("https://api.github.com/users/$username/${API_LIST[index]}")
+        followViewModel.getAPI("https://api.github.com/users/$username/${API_LIST[index]}")
     }
 }

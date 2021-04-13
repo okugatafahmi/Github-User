@@ -31,6 +31,7 @@
     <string name="developer_username" translatable="false">okugatafahmi</string>
     <string name="about_developer">About Developer</string>
     <string name="favorite">Favorite</string>
+    <string name="add_favorite">Add Favorite</string>
 
     <string-array name="username">
         <item>JakeWharton</item>

@@ -8,12 +8,13 @@ import com.okugata.githubuser.util.getGithubAPI
 import org.json.JSONArray
 import java.lang.Exception
 
-class UserDetailViewModel: ViewModel() {
-    private val listUsers = MutableLiveData<ArrayList<User>>()
+class FollowlViewModel : ViewModel() {
+    private val _listUsers = MutableLiveData<ArrayList<User>>()
+    val listUsers: LiveData<ArrayList<User>> = _listUsers
 
-    fun getAPI(url: String){
+    fun getAPI(url: String) {
         val users = ArrayList<User>()
-        getGithubAPI(url){ error, response ->
+        getGithubAPI(url) { error, response ->
             if (error != null) {
                 error.printStackTrace()
                 return@getGithubAPI
@@ -28,15 +29,13 @@ class UserDetailViewModel: ViewModel() {
                     val avatarUrl = item.getString("avatar_url")
                     users.add(User(username = login, avatarUrl = avatarUrl))
                 }
-                listUsers.postValue(users)
-            }catch (e: Exception){
+                _listUsers.postValue(users)
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    fun getUsers(): LiveData<ArrayList<User>> {
-        return listUsers
-    }
+
 
 }

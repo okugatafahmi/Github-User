@@ -44,6 +44,23 @@ data class User(
             }
             return users
         }
+
+        fun toUserFavorite(user: User): UserFavorite {
+            return user.run {
+                UserFavorite(
+                    username,
+                    name,
+                    location,
+                    repository,
+                    company,
+                    followers,
+                    following,
+                    avatar,
+                    avatarUrl,
+                    isGetAPI
+                )
+            }
+        }
     }
 
 
