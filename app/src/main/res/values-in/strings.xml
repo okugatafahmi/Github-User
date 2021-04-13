@@ -29,4 +29,6 @@
     <string name="about_developer">Tentang Pengembang</string>
     <string name="favorite">Favorit</string>
     <string name="add_favorite">Tambahkan Favorit</string>
+    <string name="reminder_title">Ingatkan pada pukul 9.00 pagi</string>
+    <string name="settings">Pengaturan</string>
 </resources>

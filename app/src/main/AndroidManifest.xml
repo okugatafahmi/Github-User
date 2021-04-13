@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubUser">
+        <activity android:name=".activity.settings.SettingsActivity" />
         <activity android:name=".activity.favorite.UserFavoriteActivity" />
         <activity
             android:name=".activity.detail.UserDetailActivity"

@@ -1,0 +1,7 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="@string/key_reminder"
+        app:title="@string/reminder_title"
+        app:icon="@drawable/ic_notifications_black_24dp"/>
+</PreferenceScreen>

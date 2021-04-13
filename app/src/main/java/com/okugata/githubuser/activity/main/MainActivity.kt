@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.okugata.githubuser.R
 import com.okugata.githubuser.activity.detail.UserDetailActivity
 import com.okugata.githubuser.activity.favorite.UserFavoriteActivity
+import com.okugata.githubuser.activity.settings.SettingsActivity
 import com.okugata.githubuser.databinding.ActivityMainBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
@@ -87,6 +88,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_change_settings -> {
                 val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+                startActivity(mIntent)
+            }
+            R.id.settings -> {
+                val mIntent = Intent(this@MainActivity, SettingsActivity::class.java)
                 startActivity(mIntent)
             }
             R.id.action_reset_list -> {

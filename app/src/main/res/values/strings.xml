@@ -32,6 +32,9 @@
     <string name="about_developer">About Developer</string>
     <string name="favorite">Favorites</string>
     <string name="add_favorite">Add Favorite</string>
+    <string name="key_reminder" translatable="false">reminder</string>
+    <string name="reminder_title">Reminder at 9.00 AM</string>
+    <string name="settings">Settings</string>
 
     <string-array name="username">
         <item>JakeWharton</item>

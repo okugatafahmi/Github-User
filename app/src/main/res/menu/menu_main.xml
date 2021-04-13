@@ -16,6 +16,11 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_change_settings"
         android:title="@string/change_language_settings"
         app:showAsAction="never"/>
