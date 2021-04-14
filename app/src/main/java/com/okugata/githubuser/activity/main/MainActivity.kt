@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.TypedArray
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -127,6 +126,7 @@ class MainActivity : AppCompatActivity() {
         searchView.apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             queryHint = resources.getString(R.string.search_hint)
+            maxWidth = Int.MAX_VALUE
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     showLoading(true)
