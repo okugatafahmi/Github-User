@@ -57,6 +57,7 @@ abstract class GithubUserRoomDatabase : RoomDatabase() {
                 userFavoriteDao.insert(
                     UserFavorite(
                         username = "okugatafahmi",
+                        name = "Okugata Fahmi",
                         avatarUrl = "https://avatars.githubusercontent.com/u/47854810?v=4"
                     )
                 )

@@ -1,7 +1,20 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
-        app:key="@string/key_reminder"
-        app:title="@string/reminder_title"
-        app:icon="@drawable/ic_notifications_black_24dp"/>
+    <PreferenceCategory app:title="@string/general">
+        <SwitchPreferenceCompat
+            app:key="@string/key_reminder"
+            app:title="@string/reminder_title"
+            app:icon="@drawable/ic_notifications_black_24dp"/>
+        <Preference
+            app:key="@string/key_language"
+            app:title="@string/change_language"
+            app:icon="@drawable/ic_g_translate_black_24dp"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/about">
+        <Preference
+            app:key="@string/key_developer"
+            app:title="@string/about_developer"
+            app:summary="@string/developer_name"/>
+    </PreferenceCategory>
 </PreferenceScreen>

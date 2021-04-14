@@ -86,27 +86,12 @@ class MainActivity : AppCompatActivity() {
                 val userFavoriteIntent = Intent(this@MainActivity, UserFavoriteActivity::class.java)
                 startActivity(userFavoriteIntent)
             }
-            R.id.action_change_settings -> {
-                val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
-                startActivity(mIntent)
-            }
             R.id.settings -> {
                 val mIntent = Intent(this@MainActivity, SettingsActivity::class.java)
                 startActivity(mIntent)
             }
             R.id.action_reset_list -> {
                 mainViewModel.setUsers(users)
-            }
-            R.id.about_developer -> {
-                val userDetailIntent = Intent(this@MainActivity, UserDetailActivity::class.java)
-                    .apply {
-                        putExtra(
-                            UserDetailActivity.EXTRA_USER, User(
-                                username = resources.getString(R.string.developer_username)
-                            )
-                        )
-                    }
-                startActivity(userDetailIntent)
             }
         }
         return true

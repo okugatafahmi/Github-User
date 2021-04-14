@@ -24,11 +24,13 @@
     </plurals>
     <string name="tab_followers">Pengikut</string>
     <string name="tab_following">Mengikuti</string>
-    <string name="change_language_settings">Ubah Bahasa</string>
+    <string name="change_language">Ubah Bahasa</string>
     <string name="reset_user_list">Reset Daftar User</string>
     <string name="about_developer">Tentang Pengembang</string>
     <string name="favorite">Favorit</string>
     <string name="add_favorite">Tambahkan Favorit</string>
     <string name="reminder_title">Ingatkan pada pukul 9.00 pagi</string>
     <string name="settings">Pengaturan</string>
+    <string name="general">General</string>
+    <string name="about">Tentang</string>
 </resources>
