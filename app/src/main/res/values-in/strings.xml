@@ -29,8 +29,12 @@
     <string name="about_developer">Tentang Pengembang</string>
     <string name="favorite">Favorit</string>
     <string name="add_favorite">Tambahkan Favorit</string>
-    <string name="reminder_title">Ingatkan pada pukul 9.00 pagi</string>
+    <string name="reminder_title_nine">Pengingat berulang pada pukul 09:00</string>
+    <string name="reminder_title">Pengingat berulang pada pukul %1$s</string>
     <string name="settings">Pengaturan</string>
     <string name="general">General</string>
     <string name="about">Tentang</string>
+    <string name="find_user">Ayo temukan pengguna yang populer di Github!</string>
+    <string name="reminder_set">Pengingat berulang diset pada pukul %1$s</string>
+    <string name="reminder_canceled">Pengingat berulang dibatalkan</string>
 </resources>
