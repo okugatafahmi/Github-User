@@ -8,63 +8,76 @@ import android.database.Cursor
 import android.net.Uri
 import com.okugata.githubuser.database.GithubUserRoomDatabase
 import com.okugata.githubuser.database.UserFavorite
-import com.okugata.githubuser.database.UserFavoriteDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 
 class UserFavoriteProvider : ContentProvider() {
     companion object {
-        private const val TABLE_NAME = UserFavorite.TABLE_NAME
-        private const val USER = 1
-        private const val USER_ID = 2
+        private const val USER_FAVORITE_TABLE = UserFavorite.TABLE_NAME
+        private const val CODE_USER = 1
+        private const val CODE_USER_ID = 2
         private val sUriMatcher = UriMatcher(UriMatcher.NO_MATCH)
 
-        val CONTENT_URI: Uri = Uri.Builder().scheme("content")
+        val USER_FAVORITE_URI: Uri = Uri.Builder().scheme("content")
             .authority(GithubUserRoomDatabase.AUTHORITY)
-            .appendPath(TABLE_NAME)
+            .appendPath(USER_FAVORITE_TABLE)
             .build()
 
         init {
-            sUriMatcher.addURI(GithubUserRoomDatabase.AUTHORITY, TABLE_NAME, USER)
-            sUriMatcher.addURI(GithubUserRoomDatabase.AUTHORITY, "$TABLE_NAME/#", USER_ID)
+            sUriMatcher.addURI(GithubUserRoomDatabase.AUTHORITY, USER_FAVORITE_TABLE, CODE_USER)
+            sUriMatcher.addURI(GithubUserRoomDatabase.AUTHORITY, "$USER_FAVORITE_TABLE/#", CODE_USER_ID)
         }
     }
 
-    private lateinit var database: GithubUserRoomDatabase
-    private var userFavoriteDao: UserFavoriteDao? = null
-
     override fun onCreate(): Boolean {
-        database = GithubUserRoomDatabase.getDatabase(context as Context, CoroutineScope(SupervisorJob()))
-        userFavoriteDao = database.userFavoriteDao()
         return true
     }
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        TODO("Implement this to handle requests to delete one or more rows")
-    }
-
     override fun getType(uri: Uri): String? {
-        TODO(
-            "Implement this to handle requests for the MIME type of the data" +
-                    "at the given URI"
-        )
+        return null
     }
-
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        TODO("Implement this to handle requests to insert a new row.")
-    }
-
     override fun query(
         uri: Uri, projection: Array<String>?, selection: String?,
         selectionArgs: Array<String>?, sortOrder: String?
     ): Cursor? {
-        TODO("Implement this to handle query requests from clients.")
+        val dao = GithubUserRoomDatabase.getDatabase(context as Context).userFavoriteDao()
+        return when(sUriMatcher.match(uri)) {
+            CODE_USER -> dao.getAllUserCursor()
+            CODE_USER_ID -> dao.getUserByIdCursor(uri.lastPathSegment.toString().toLong())
+            else -> null
+        }
+    }
+
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        val dao = GithubUserRoomDatabase.getDatabase(context as Context).userFavoriteDao()
+        val added = when (CODE_USER) {
+            sUriMatcher.match(uri) -> dao.insert(UserFavorite.fromContentValues(values))
+            else -> 0
+        }
+        context?.contentResolver?.notifyChange(USER_FAVORITE_URI, null)
+        return Uri.parse("$USER_FAVORITE_URI/$added")
     }
 
     override fun update(
         uri: Uri, values: ContentValues?, selection: String?,
         selectionArgs: Array<String>?
     ): Int {
-        TODO("Implement this to handle requests to update one or more rows.")
+        val dao = GithubUserRoomDatabase.getDatabase(context as Context).userFavoriteDao()
+        val updated = when (CODE_USER_ID) {
+            sUriMatcher.match(uri) -> dao.update(UserFavorite.fromContentValues(values, uri.lastPathSegment.toString().toLong()))
+            else -> 0
+        }
+        context?.contentResolver?.notifyChange(USER_FAVORITE_URI, null)
+        return updated
+    }
+
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        val dao = GithubUserRoomDatabase.getDatabase(context as Context).userFavoriteDao()
+        val deleted = when (CODE_USER_ID) {
+//            sUriMatcher.match(uri) -> dao.delete(uri.lastPathSegment.toString().toLong())
+            else -> 0
+        }
+
+        context?.contentResolver?.notifyChange(USER_FAVORITE_URI, null)
+
+        return deleted
     }
 }

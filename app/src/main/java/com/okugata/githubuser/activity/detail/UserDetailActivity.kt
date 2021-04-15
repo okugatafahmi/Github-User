@@ -161,7 +161,9 @@ class UserDetailActivity : AppCompatActivity() {
             userFavoriteViewModel.insert(User.toUserFavorite(user))
         }
         else {
-            userFavoriteViewModel.delete(User.toUserFavorite(user))
+            user.id?.let {
+                userFavoriteViewModel.delete(it)
+            }
         }
     }
 }

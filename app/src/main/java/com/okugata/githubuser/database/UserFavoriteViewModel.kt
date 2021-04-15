@@ -11,8 +11,8 @@ class UserFavoriteViewModel(private val dao: UserFavoriteDao) : ViewModel() {
         dao.insert(user)
     }
 
-    fun delete(user: UserFavorite) = viewModelScope.launch {
-        dao.delete(user)
+    fun delete(id: Long) = viewModelScope.launch {
+//        dao.delete(id)
     }
 }
 

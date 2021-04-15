@@ -17,7 +17,8 @@ data class User(
     var following: Int = 0,
     var avatar: Int = 0,
     var avatarUrl: String = "",
-    var isGetAPI: Boolean = true
+    var isGetAPI: Boolean = true,
+    var id: Long? = null
 ) : Parcelable {
     companion object {
         private fun fromUserFavorite(userFavorite: UserFavorite): User {
@@ -48,6 +49,7 @@ data class User(
         fun toUserFavorite(user: User): UserFavorite {
             return user.run {
                 UserFavorite(
+                    id ?: 0,
                     username,
                     name,
                     location,

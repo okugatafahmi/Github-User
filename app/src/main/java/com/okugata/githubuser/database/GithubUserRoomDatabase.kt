@@ -22,7 +22,7 @@ abstract class GithubUserRoomDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: GithubUserRoomDatabase? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope): GithubUserRoomDatabase {
+        fun getDatabase(context: Context, scope: CoroutineScope? = null): GithubUserRoomDatabase {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
@@ -39,13 +39,13 @@ abstract class GithubUserRoomDatabase : RoomDatabase() {
         }
 
         private class WordDatabaseCallback(
-            private val scope: CoroutineScope
+            private val scope: CoroutineScope?
         ) : RoomDatabase.Callback() {
 
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 INSTANCE?.let { database ->
-                    scope.launch {
+                    scope?.launch {
                         populateDatabase(database.userFavoriteDao())
                     }
                 }
