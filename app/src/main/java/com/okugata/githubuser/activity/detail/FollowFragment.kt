@@ -30,7 +30,7 @@ class FollowFragment : Fragment() {
 
     private lateinit var rvUser: RecyclerView
     private lateinit var progressBar: ProgressBar
-    private lateinit var followViewModel: FollowlViewModel
+    private lateinit var followViewModel: FollowViewModel
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +55,7 @@ class FollowFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
 
         followViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
-            .get(FollowlViewModel::class.java)
+            .get(FollowViewModel::class.java)
         followViewModel.listUsers.observe(viewLifecycleOwner){ userItems ->
             if (userItems != null) {
                 adapter.setListUser(userItems)

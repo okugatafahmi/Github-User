@@ -2,7 +2,7 @@ package com.okugata.githubuser.model
 
 import android.os.Parcelable
 import com.okugata.githubuser.database.UserFavorite
-import com.okugata.githubuser.util.getGithubAPI
+import com.okugata.githubuser.util.GithubAPI.getGithubAPI
 import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 
@@ -45,24 +45,6 @@ data class User(
             }
             return users
         }
-
-        fun toUserFavorite(user: User): UserFavorite {
-            return user.run {
-                UserFavorite(
-                    id ?: 0,
-                    username,
-                    name,
-                    location,
-                    repository,
-                    company,
-                    followers,
-                    following,
-                    avatar,
-                    avatarUrl,
-                    isGetAPI
-                )
-            }
-        }
     }
 
 
@@ -92,5 +74,21 @@ data class User(
                 }
             }
         }
+    }
+
+    fun toUserFavorite(): UserFavorite {
+        return UserFavorite(
+            id ?: 0,
+            username,
+            name,
+            location,
+            repository,
+            company,
+            followers,
+            following,
+            avatar,
+            avatarUrl,
+            isGetAPI
+        )
     }
 }

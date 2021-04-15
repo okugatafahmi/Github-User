@@ -1,26 +1,30 @@
 package com.okugata.githubuser.activity.favorite
 
 import android.content.Intent
+import android.database.ContentObserver
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.okugata.githubuser.GithubUserApplication
 import com.okugata.githubuser.R
 import com.okugata.githubuser.activity.detail.UserDetailActivity
-import com.okugata.githubuser.database.UserFavoriteViewModel
-import com.okugata.githubuser.database.UserFavoriteViewModelFactory
+import com.okugata.githubuser.provider.UserFavoriteProvider
+import com.okugata.githubuser.database.UserFavorite
 import com.okugata.githubuser.databinding.ActivityUserFavoriteBinding
 import com.okugata.githubuser.model.User
 import com.okugata.githubuser.recyclerview.ListUserAdapter
 import com.okugata.githubuser.recyclerview.OnItemClickCallback
+import com.okugata.githubuser.util.MappingHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class UserFavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserFavoriteBinding
-    private val userFavoriteViewModel: UserFavoriteViewModel by viewModels {
-        UserFavoriteViewModelFactory((application as GithubUserApplication).userFavoriteDao)
-    }
+    private lateinit var observer: ContentObserver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +53,32 @@ class UserFavoriteActivity : AppCompatActivity() {
         }
         binding.rvUser.adapter = adapter
 
-        userFavoriteViewModel.allUser.observe(this) { users ->
-            users?.let { adapter.setListUser(User.fromUserFavoriteList(it)) }
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+
+        observer = object : ContentObserver(handler) {
+            override fun onChange(self: Boolean) {
+                loadUserFavoritesAsync {
+                    adapter.setListUser(User.fromUserFavoriteList(it))
+                }
+            }
         }
+
+        contentResolver.registerContentObserver(
+            UserFavoriteProvider.USER_FAVORITE_URI,
+            true,
+            observer
+        )
+
+        loadUserFavoritesAsync {
+            adapter.setListUser(User.fromUserFavoriteList(it))
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        contentResolver.unregisterContentObserver(observer)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -59,5 +86,22 @@ class UserFavoriteActivity : AppCompatActivity() {
             android.R.id.home -> finish()
         }
         return true
+    }
+
+    private fun loadUserFavoritesAsync(callback: (ArrayList<UserFavorite>) -> Unit) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val deferredUserFavorites = async(Dispatchers.IO) {
+                val cursor = contentResolver.query(
+                    UserFavoriteProvider.USER_FAVORITE_URI,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                MappingHelper.mapCursorToArrayList(cursor)
+            }
+            val users = deferredUserFavorites.await()
+            callback(users)
+        }
     }
 }

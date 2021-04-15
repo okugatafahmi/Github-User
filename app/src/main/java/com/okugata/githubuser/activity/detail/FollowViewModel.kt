@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.okugata.githubuser.model.User
-import com.okugata.githubuser.util.getGithubAPI
+import com.okugata.githubuser.util.GithubAPI.getGithubAPI
 import org.json.JSONArray
 import java.lang.Exception
 
-class FollowlViewModel : ViewModel() {
+class FollowViewModel : ViewModel() {
     private val _listUsers = MutableLiveData<ArrayList<User>>()
     val listUsers: LiveData<ArrayList<User>> = _listUsers
 
@@ -35,7 +35,6 @@ class FollowlViewModel : ViewModel() {
             }
         }
     }
-
 
 
 }

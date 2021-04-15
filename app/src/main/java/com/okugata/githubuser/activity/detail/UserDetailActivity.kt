@@ -1,22 +1,28 @@
 package com.okugata.githubuser.activity.detail
 
 import android.content.Intent
+import android.database.ContentObserver
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
-import com.okugata.githubuser.GithubUserApplication
 import com.okugata.githubuser.R
-import com.okugata.githubuser.database.UserFavoriteViewModel
-import com.okugata.githubuser.database.UserFavoriteViewModelFactory
+import com.okugata.githubuser.provider.UserFavoriteProvider.Companion.USER_FAVORITE_URI
 import com.okugata.githubuser.databinding.ActivityUserDetailBinding
 import com.okugata.githubuser.model.User
+import com.okugata.githubuser.util.MappingHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class UserDetailActivity : AppCompatActivity() {
@@ -33,9 +39,7 @@ class UserDetailActivity : AppCompatActivity() {
     private lateinit var user: User
     private lateinit var binding: ActivityUserDetailBinding
     private var isFavorite = false
-    private val userFavoriteViewModel: UserFavoriteViewModel by viewModels {
-        UserFavoriteViewModelFactory((application as GithubUserApplication).userFavoriteDao)
-    }
+    private lateinit var observer: ContentObserver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,15 +71,17 @@ class UserDetailActivity : AppCompatActivity() {
         }
         setTabLayout()
 
-        userFavoriteViewModel.allUser.observe(this) { users ->
-            val item = users.find { it.username == user.username }
-            setFavorite(item != null)
-            if (item != null) user.id = item.id
-        }
-
         binding.fab.setOnClickListener {
             onClickFab()
         }
+
+        setObserverUserFavorites()
+        checkUserFavorites()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        contentResolver.unregisterContentObserver(observer)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -160,11 +166,72 @@ class UserDetailActivity : AppCompatActivity() {
 
     private fun onClickFab() {
         if (!isFavorite) {
-            userFavoriteViewModel.insert(User.toUserFavorite(user))
+            GlobalScope.launch(Dispatchers.Main) {
+                val deferredUri = async(Dispatchers.IO) {
+                    contentResolver.insert(
+                        Uri.parse(USER_FAVORITE_URI.toString()),
+                        user.toUserFavorite().toContentValues()
+                    )
+                }
+                deferredUri.await()?.also {
+                    val id = it.lastPathSegment.toString().toLong()
+                    if (id < 1L) return@also
+                    user.id = id
+                    setFavorite(true)
+                }
+            }
+        } else {
+            GlobalScope.launch(Dispatchers.Main) {
+                val deferredDeleted = async(Dispatchers.IO) {
+                    contentResolver.delete(
+                        Uri.parse("$USER_FAVORITE_URI/${user.id ?: 0}"),
+                        null,
+                        null
+                    )
+                }
+                deferredDeleted.await().also {
+                    setFavorite(it != 1)
+                }
+            }
         }
-        else {
-            user.id?.let {
-                userFavoriteViewModel.delete(it)
+    }
+
+    private fun setObserverUserFavorites() {
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+
+        observer = object : ContentObserver(handler) {
+            override fun onChange(self: Boolean) {
+                checkUserFavorites()
+            }
+        }
+
+        // register URI of this user if there is update
+        contentResolver.registerContentObserver(
+            Uri.parse(USER_FAVORITE_URI.toString()),
+            true,
+            observer
+        )
+    }
+
+    private fun checkUserFavorites() {
+        // Get all favorite & check if current user in favorite
+        GlobalScope.launch(Dispatchers.Main) {
+            val deferredUserFavorites = async(Dispatchers.IO) {
+                val cursor = contentResolver.query(
+                    USER_FAVORITE_URI,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                MappingHelper.mapCursorToArrayList(cursor)
+            }
+            deferredUserFavorites.await().also { users ->
+                val item = users.find { it.username == user.username }
+                setFavorite(item != null)
+                user.id = item?.id
             }
         }
     }

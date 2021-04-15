@@ -27,8 +27,8 @@ interface UserFavoriteDao {
     @Query("DELETE FROM ${UserFavorite.TABLE_NAME}")
     suspend fun deleteAll()
 
-//    @Delete(entity = UserFavorite::class)
-//    fun delete(id: Long): Int
+    @Query("DELETE FROM ${UserFavorite.TABLE_NAME} WHERE id = :id")
+    fun delete(id: Long): Int
 
     @Query("DELETE FROM ${UserFavorite.TABLE_NAME} WHERE id = :id")
     suspend fun deleteSuspend(id: Long): Int

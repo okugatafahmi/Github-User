@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.okugata.githubuser.model.User
-import com.okugata.githubuser.util.getGithubAPI
+import com.okugata.githubuser.util.GithubAPI.getGithubAPI
 import org.json.JSONObject
 import java.lang.Exception
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
     private val _listUsers = MutableLiveData<ArrayList<User>>()
     val listUsers: LiveData<ArrayList<User>> = _listUsers
 
@@ -31,7 +31,7 @@ class MainViewModel: ViewModel() {
                     users.add(User(username = login, avatarUrl = avatarUrl))
                 }
                 _listUsers.postValue(users)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }

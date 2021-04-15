@@ -71,7 +71,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
     fun setRepeatingReminder(context: Context, time: String, message: String) {
 
-        // Validasi inputan waktu terlebih dahulu
+        // Validate time input first
         if (isTimeInvalid(time)) return
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
