@@ -18,6 +18,9 @@ interface UserFavoriteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(userFavorite: UserFavorite): Long
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSuspend(userFavorite: UserFavorite)
+
     @Update
     fun update(userFavorite: UserFavorite): Int
 
@@ -26,4 +29,7 @@ interface UserFavoriteDao {
 
 //    @Delete(entity = UserFavorite::class)
 //    fun delete(id: Long): Int
+
+    @Query("DELETE FROM ${UserFavorite.TABLE_NAME} WHERE id = :id")
+    suspend fun deleteSuspend(id: Long): Int
 }

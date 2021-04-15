@@ -68,7 +68,9 @@ class UserDetailActivity : AppCompatActivity() {
         setTabLayout()
 
         userFavoriteViewModel.allUser.observe(this) { users ->
-            setFavorite(users.find { it.username == user.username } != null)
+            val item = users.find { it.username == user.username }
+            setFavorite(item != null)
+            if (item != null) user.id = item.id
         }
 
         binding.fab.setOnClickListener {

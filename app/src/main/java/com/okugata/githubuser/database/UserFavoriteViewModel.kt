@@ -8,11 +8,11 @@ class UserFavoriteViewModel(private val dao: UserFavoriteDao) : ViewModel() {
     val allUser: LiveData<List<UserFavorite>> = dao.getAllUser().asLiveData()
 
     fun insert(user: UserFavorite) = viewModelScope.launch {
-        dao.insert(user)
+        dao.insertSuspend(user)
     }
 
     fun delete(id: Long) = viewModelScope.launch {
-//        dao.delete(id)
+        dao.deleteSuspend(id)
     }
 }
 
