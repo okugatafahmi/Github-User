@@ -12,9 +12,11 @@ import kotlinx.coroutines.launch
 @Database(entities = [UserFavorite::class], version = 1, exportSchema = false)
 abstract class GithubUserRoomDatabase : RoomDatabase() {
 
-    abstract fun userFavoirteDao(): UserFavoriteDao
+    abstract fun userFavoriteDao(): UserFavoriteDao
 
     companion object {
+        const val AUTHORITY = "com.okugata.github_user"
+
         // Singleton prevents multiple instances of database opening at the
         // same time.
         @Volatile
@@ -44,7 +46,7 @@ abstract class GithubUserRoomDatabase : RoomDatabase() {
                 super.onCreate(db)
                 INSTANCE?.let { database ->
                     scope.launch {
-                        populateDatabase(database.userFavoirteDao())
+                        populateDatabase(database.userFavoriteDao())
                     }
                 }
             }

@@ -3,7 +3,7 @@ package com.okugata.githubuser.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "user_favorite")
+@Entity(tableName = UserFavorite.TABLE_NAME)
 data class UserFavorite(
     @PrimaryKey val username: String,
     val name: String = "",
@@ -15,4 +15,8 @@ data class UserFavorite(
     val avatar: Int = 0,
     val avatarUrl: String = "",
     val isGetAPI: Boolean = true
-)
+) {
+    companion object {
+        const val TABLE_NAME = "user_favorite"
+    }
+}

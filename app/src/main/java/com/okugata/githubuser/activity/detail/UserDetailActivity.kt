@@ -34,7 +34,7 @@ class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding
     private var isFavorite = false
     private val userFavoriteViewModel: UserFavoriteViewModel by viewModels {
-        UserFavoriteViewModelFactory((application as GithubUserApplication).userFavoriteRepository)
+        UserFavoriteViewModelFactory((application as GithubUserApplication).userFavoriteDao)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserFavoriteDao {
-    @Query("SELECT * FROM user_favorite ORDER BY username ASC")
+    @Query("SELECT * FROM ${UserFavorite.TABLE_NAME} ORDER BY username ASC")
     fun getAllUser(): Flow<List<UserFavorite>>
 
-    @Query("DELETE FROM user_favorite")
+    @Query("DELETE FROM ${UserFavorite.TABLE_NAME}")
     suspend fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

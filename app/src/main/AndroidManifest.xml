@@ -15,6 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubUser">
+        <provider
+            android:name=".contentprovider.UserFavoriteProvider"
+            android:authorities="com.okugata.githubuser"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity android:name=".activity.settings.SettingsActivity" />
         <activity android:name=".activity.favorite.UserFavoriteActivity" />
         <activity
@@ -32,7 +38,6 @@
             android:name=".reminder.ReminderReceiver"
             android:enabled="true"
             android:exported="false" />
-
     </application>
 
 </manifest>
