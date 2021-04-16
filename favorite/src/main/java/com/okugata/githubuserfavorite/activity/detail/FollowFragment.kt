@@ -1,16 +1,19 @@
 package com.okugata.githubuserfavorite.activity.detail
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.okugata.githubuserfavorite.R
+import com.okugata.githubuserfavorite.model.User
 import com.okugata.githubuserfavorite.recyclerview.ListUserAdapter
+import com.okugata.githubuserfavorite.recyclerview.OnItemClickCallback
 
 class FollowFragment : Fragment() {
     companion object {
@@ -46,7 +49,15 @@ class FollowFragment : Fragment() {
         rvUser = view.findViewById(R.id.rv_user)
         progressBar = view.findViewById(R.id.progressBar)
 
-        val adapter = ListUserAdapter()
+        val adapter = ListUserAdapter().apply {
+            setOnItemClickCallback(object : OnItemClickCallback {
+                override fun onItemClicked(user: User) {
+                    val userDetailIntent = Intent(requireContext(), UserDetailActivity::class.java)
+                    userDetailIntent.putExtra(UserDetailActivity.EXTRA_USER, user)
+                    startActivity(userDetailIntent)
+                }
+            })
+        }
 
         rvUser.setHasFixedSize(true)
         rvUser.layoutManager = LinearLayoutManager(activity)
