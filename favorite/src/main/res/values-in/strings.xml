@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GitHub User Favorite</string>
+    <string name="name">Nama</string>
+    <string name="username">username</string>
+    <plurals name="numberOfRepository">
+        <item quantity="other">%d repositori</item>
+    </plurals>
+    <plurals name="numberOfFollower">
+        <item quantity="other">%d pengikut</item>
+    </plurals>
+    <plurals name="numberOfFollowing">
+        <item quantity="other">%d mengikuti</item>
+    </plurals>
+
+    <string name="repository">repository</string>
+    <string name="company">perusahaan</string>
+    <string name="location">lokasi</string>
+    <string name="share">Bagikan</string>
+    <string name="search">Cari</string>
+    <string name="search_hint">Masukkan username</string>
+    <plurals name="numberOfRepositoryShareUser">
+        <item quantity="other">Saya menemukan pengguna GitHub yang bagus dengan username %1$s yang memiliki %2$d repositori!\nCek di https://github.com/%1$s</item>
+    </plurals>
+    <string name="tab_followers">Pengikut</string>
+    <string name="tab_following">Mengikuti</string>
+    <string name="change_language">Ubah Bahasa</string>
+    <string name="reset_user_list">Reset Daftar User</string>
+    <string name="about_developer">Tentang Pengembang</string>
+    <string name="favorite">Favorit</string>
+    <string name="add_favorite">Tambahkan Favorit</string>
+    <string name="reminder_title_nine">Pengingat berulang pada pukul 09:00</string>
+    <string name="reminder_title">Pengingat berulang pada pukul %1$s</string>
+    <string name="settings">Pengaturan</string>
+    <string name="general">General</string>
+    <string name="about">Tentang</string>
+    <string name="find_user">Ayo temukan pengguna yang populer di Github!</string>
+    <string name="reminder_set">Pengingat berulang diset pada pukul %1$s</string>
+    <string name="reminder_canceled">Pengingat berulang dibatalkan</string>
+</resources>

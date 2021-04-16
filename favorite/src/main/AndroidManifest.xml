@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.okugata.githubuserfavorite">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.okugata.githubuser.READ_DATABASE"/>
+    <uses-permission android:name="com.okugata.githubuser.WRITE_DATABASE"/>
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GithubUser">
+        <activity android:name=".activity.settings.SettingsActivity" />
+        <activity
+            android:name=".activity.detail.UserDetailActivity"
+            android:theme="@style/NoActionBar" />
+        <activity android:name=".activity.favorite.UserFavoriteActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+    <queries>
+        <package android:name="com.okugata.githubuser" />
+    </queries>
+</manifest>
